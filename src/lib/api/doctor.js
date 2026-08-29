@@ -119,19 +119,26 @@ export const GetDoctorAppointments = async () => {
 
 
 export const GetFeaturedDoctors = async () => {
-  const res = await fetch(`${baseUrl}/doctors/featured`, {
-    cache: "no-store",
-  });
+  try {
+    const res = await fetch(`${baseUrl}/doctors/featured`, {
+      cache: "no-store",
+    });
 
-  const data = await res.json();
+    const result = await res.json();
 
-  if (!res.ok) {
-    throw new Error(
-      data.msg || "Failed to fetch featured doctors"
-    );
+    if (!res.ok) {
+      throw new Error(
+        result.message ||
+          result.msg ||
+          "Failed to fetch featured doctors"
+      );
+    }
+
+    return result.data || [];
+  } catch (error) {
+    console.error("Failed to fetch featured doctors:", error);
+    return [];
   }
-
-  return data;
 };
 
 
