@@ -187,6 +187,8 @@ await authClient.signIn.social({
                   Register
                 </Link>
               </p>
+
+              <p className="text-xl font-bold"></p>
             </div>
           </div>
         </div>

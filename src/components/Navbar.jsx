@@ -5,6 +5,8 @@ import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+
 import {
   FaBars,
   FaTimes,
@@ -13,6 +15,8 @@ import {
   FaTachometerAlt,
   FaCalendarCheck,
   FaChevronDown,
+  FaMoon,
+  FaSun,
 } from "react-icons/fa";
 
 const Navbar = () => {
@@ -22,7 +26,7 @@ const Navbar = () => {
     setMounted(true);
   }, []);
 
-  // Server/prerender time এ useSession চালাবে না
+
   if (!mounted) {
     return (
       <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-950">
@@ -49,6 +53,8 @@ const NavbarContent = () => {
   const pathname = usePathname();
   const router = useRouter();
 
+  const { theme, setTheme } = useTheme();
+
   const { data: session, isPending } = authClient.useSession();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -61,8 +67,10 @@ const NavbarContent = () => {
   const handleLogout = async () => {
     try {
       await authClient.signOut();
+
       setDropdownOpen(false);
       setMobileOpen(false);
+
       router.push("/");
       router.refresh();
     } catch (error) {
@@ -72,6 +80,10 @@ const NavbarContent = () => {
 
   const closeMobileMenu = () => {
     setMobileOpen(false);
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   const navLinks = [
@@ -136,6 +148,16 @@ const NavbarContent = () => {
 
         {/* Desktop Right Side */}
         <div className="hidden items-center gap-3 lg:flex">
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-gray-700 transition hover:bg-gray-100 dark:text-yellow-300 dark:hover:bg-slate-800"
+            aria-label="Toggle theme"
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? <FaSun /> : <FaMoon />}
+          </button>
 
           {isPending ? (
             <div className="h-10 w-24 animate-pulse rounded-lg bg-gray-100 dark:bg-slate-800" />
@@ -274,14 +296,27 @@ const NavbarContent = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileOpen((prev) => !prev)}
-          className="rounded-lg p-2 text-xl text-gray-700 transition hover:bg-gray-100 dark:text-white dark:hover:bg-slate-800 lg:hidden"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <FaTimes /> : <FaBars />}
-        </button>
+        {/* Mobile Right */}
+        <div className="flex items-center gap-2 lg:hidden">
+
+          {/* Mobile Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-gray-700 transition hover:bg-gray-100 dark:text-yellow-300 dark:hover:bg-slate-800"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <FaSun /> : <FaMoon />}
+          </button>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="rounded-lg p-2 text-xl text-gray-700 transition hover:bg-gray-100 dark:text-white dark:hover:bg-slate-800"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -375,6 +410,22 @@ const NavbarContent = () => {
                     <FaUser />
                     My Profile
                   </Link>
+
+                  {/* Appointments */}
+                  {(role === "doctor" || role === "patient") && (
+                    <Link
+                      href={
+                        role === "doctor"
+                          ? "/dashboard/doctor/appointments"
+                          : "/dashboard/patient/appointments"
+                      }
+                      onClick={closeMobileMenu}
+                      className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-slate-800"
+                    >
+                      <FaCalendarCheck />
+                      Appointments
+                    </Link>
+                  )}
 
                   {/* Logout */}
                   <button
