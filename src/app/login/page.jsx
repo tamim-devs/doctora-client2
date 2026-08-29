@@ -188,7 +188,20 @@ await authClient.signIn.social({
                 </Link>
               </p>
 
-              <p className="text-xl font-bold"></p>
+              <p className="text-xl font-bold">gmail : admin1@gmail.com 
+
+                pass : ADmin1@22
+
+
+                gmail : Paiten@gmail.com
+
+                pass : Paiten@22 
+
+
+                gmail : doctor@gmail.com 
+
+                pass : DOCtor@@2
+              </p>
             </div>
           </div>
         </div>
