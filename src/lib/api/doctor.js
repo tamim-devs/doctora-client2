@@ -134,7 +134,7 @@ export const GetFeaturedDoctors = async () => {
       );
     }
 
-    return result.data || [];
+    return result || [];
   } catch (error) {
     console.error("Failed to fetch featured doctors:", error);
     return [];
