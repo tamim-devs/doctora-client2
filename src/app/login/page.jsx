@@ -116,7 +116,7 @@ await authClient.signIn.social({
     id="email"
     type="email"
     placeholder="doctor@example.com"
-    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-cyan-500"
+    className="w-full rounded-xl border text-black border-gray-300 px-4 py-3 outline-none transition focus:border-cyan-500"
   />
 </div>
 
@@ -132,7 +132,7 @@ await authClient.signIn.social({
       })}
       type={showPassword ? "text" : "password"}
       placeholder="Enter your password"
-      className={`w-full rounded-xl border px-4 py-3 pr-12 outline-none transition ${
+      className={`w-full text-black rounded-xl border px-4 py-3 pr-12 outline-none transition ${
         errors.password
           ? "border-red-500 focus:border-red-500"
           : "border-gray-300 focus:border-cyan-500"
